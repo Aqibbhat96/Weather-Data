@@ -1,0 +1,192 @@
+---
+title: "Assignment_3_DANA_4800"
+output: pdf_document
+date: "2024-02-04"
+Name: Aqib Nisar
+Student ID: 100422276
+---
+
+```{r}
+#Task 1
+
+#To import the file.
+Puebla23 = read.csv(file.choose(),header = T)
+
+#to convert the month column into a categorical with custom levels.
+Puebla23$Month = factor(Puebla23$Month, levels = c("Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept","Oct","Nov","Dec","Jan"))
+
+#now we convert other variables into categorical
+Puebla23$Year = factor(Puebla23$Year)
+Puebla23$Weaather_main = factor(Puebla23$Weaather_main)
+Puebla23$Weather_Description = factor(Puebla23$Weather_Description)
+Puebla23$Weather_icon = factor(Puebla23$Weather_icon)
+
+#to get summary of our dataset
+summary(Puebla23)
+
+#to view part of our dataset
+sum(Puebla23$Temp != Puebla23$Temp_Min)
+sum(Puebla23$Temp != Puebla23$Temp_Max)
+sum(Puebla23$Temp_Max != Puebla23$Temp_Min)
+sum(Puebla23$Wind_Speed != Puebla23$Wind_Gust)
+
+```
+After importing our dataset, we are having 8785 observations with 22 columns. We are categorizing 'Month' variable into customs levels so that we will have sorted months in our graph. We are also converting 'Weather main', 'Weather Description' and 'Weather Icon' variables to categorical as they only have 3, 9 and 10 categories/levels respectively.
+
+Looking at the summary of our data, we can see different ranges of our continuous variables (i.e. 'Temp' 'Feels like', 'Temp Min', 'Temp Max', 'Pressure', 'Humidity', 'Wind Speed', 'Wind degree', 'Wind Gust', 'Clouds'). However, some of the variables have almost all of the values similar, this is confirmed by using the sum() function above which shows that 'Temp', 'Temp Min' and 'Temp Max' have only 3 out of 8785 observations different from each other while as 'Wind speed' and 'Wind Gust' have all 8785 similar observations.
+
+
+```{r}
+#Task 2
+
+#To plot monthly graphs of different variables.
+boxplot(Puebla23$Temp ~ Puebla23$Month, main = "Boxplot of Temp vs Months", ylim = c(0,35), xlab = "Months", ylab = "Temperature (in °C)", col = 'lightblue', las = 1)
+boxplot(Puebla23$Feels_like ~ Puebla23$Month, main = "Boxplot of Feel like Temp vs Months", ylim = c(0,35), xlab = "Months", ylab = "Feel like Temperature (in °C)", col = 'lightblue', las = 1)
+boxplot(Puebla23$Pressure ~ Puebla23$Month, main = "Boxplot of Pressure vs Months", xlab = "Months", ylab = "Atmospheric Presssure (hPa)", col = 'lightblue', las = 1)
+boxplot(Puebla23$Humidity ~ Puebla23$Month, main = "Boxplot of Humidity vs Months", xlab = "Months", ylab = "Humidity (%)", col = 'lightblue', las = 1)
+boxplot(Puebla23$Wind_Speed ~ Puebla23$Month, main = "Boxplot of Wind speed vs Months", xlab = "Months", ylab = "Speed of wind (m/s)", col = 'lightblue', las = 1)
+boxplot(Puebla23$Wind_Deg ~ Puebla23$Month, main = "Boxplot of Wind Degree vs Months", ylim = c(0,360), xlab = "Months", ylab = "Direction of wind (degree)", col = 'lightblue', las = 1)
+boxplot(Puebla23$Clouds_all ~ Puebla23$Month, main = "Boxplot of Cloudiness vs Months", xlab = "Months", ylab = "Cloudiness (%)", col = 'lightblue', las = 1)
+
+#to plot barplots
+library(ggplot2)
+
+#barplot of monthly weather type
+ggplot(Puebla23, aes(x = Month, fill = Weaather_main)) +
+  geom_bar(position = "dodge", stat = "count") +
+  labs(title = "Bar Plot of Month with Weather", x = "Month", y = "Count")
+
+#barplot of cloud vs weather description
+ggplot(Puebla23, aes(x = Weather_Description, y = Clouds_all)) +
+  geom_bar(stat = "summary") +
+  labs(title = "Bar Plot of Clouds by Weather Description", x = "Weather Description", y = "Clouds (%)")
+
+
+#to find correlation
+cor(Puebla23[,9:18])
+
+#to scatterplots of numerical variables
+plot(Puebla23$Temp, Puebla23$Feels_like, main = "Scatterplot of Temp vs Feels like", xlab = "Temperature (in °C)", ylab = "Feels like Temperature (in °C)", col = 'lightgreen', las = 1) + lines(smooth.spline(Puebla23$Temp, Puebla23$Feels_like), col = 'blue')
+
+plot(Puebla23$Temp, Puebla23$Pressure, main = "Scatterplot of Temp vs Pressure", xlab = "Temperature (in °C)", ylab = "Atmospheric Presssure (hPa)", col = 'lightgreen', las = 1) + lines(smooth.spline(Puebla23$Temp, Puebla23$Pressure), col = 'blue')
+
+plot(Puebla23$Temp, Puebla23$Humidity, main = "Scatterplot of Temp vs Humidity", xlab = "Temperature (in °C)", ylab = "", col = 'lightgreen', las = 1) + lines(smooth.spline(Puebla23$Temp, Puebla23$Humidity), col = 'blue')
+
+plot(Puebla23$Pressure, Puebla23$Humidity, main = "Scatterplot of Pressure vs Humidity", xlab = "Atmospheric Presssure (hPa)", ylab = "Humidity (%)", col = 'lightgreen', las = 1) + lines(smooth.spline(Puebla23$Pressure, Puebla23$Humidity), col = 'blue')
+```
+
+We are first plotting boxplot to see monthly trends and patterns of our continuous variables. Then we are using barplot to find the frequency of hours for different weather types and percentage of clouds with respect to different weather conditions. Finally we are plotting scatterplots between different continuous variables, which have strong correlation, to find relationship between them.
+
+
+
+```{r}
+#Task3
+#to find missing values
+colSums(is.na(Puebla23))
+```
+
+By using colSums() function we can see that we don't have any missing values in any variables of our dataset therefore, nothing needs to be fixed.
+
+
+```{r}
+#Task4
+#Outliers
+#Refer to the previous montly boxplots
+
+#summary of each month
+summary(Puebla23[Puebla23$Month == "Feb",])
+summary(Puebla23[Puebla23$Month == "Mar",])
+summary(Puebla23[Puebla23$Month == "Apr",])
+summary(Puebla23[Puebla23$Month == "May",])
+summary(Puebla23[Puebla23$Month == "Jun",])
+summary(Puebla23[Puebla23$Month == "Jul",])
+summary(Puebla23[Puebla23$Month == "Aug",])
+summary(Puebla23[Puebla23$Month == "Sept",])
+summary(Puebla23[Puebla23$Month == "Oct",])
+summary(Puebla23[Puebla23$Month == "Nov",])
+summary(Puebla23[Puebla23$Month == "Dec",])
+summary(Puebla23[Puebla23$Month == "Jan",])
+
+
+#to get number of outliers for wind speed
+sum(Puebla23$Month == "May" & Puebla23$Wind_Speed > 6.46)
+sum(Puebla23$Month == "Jun" & Puebla23$Wind_Speed > 6.56)
+sum(Puebla23$Month == "Jul" & Puebla23$Wind_Speed > 5.00)
+sum(Puebla23$Month == "Aug" & Puebla23$Wind_Speed > 4.96)
+sum(Puebla23$Month == "Sept" & Puebla23$Wind_Speed > 4.39)
+sum(Puebla23$Month == "Oct" & Puebla23$Wind_Speed > 6.39)
+sum(Puebla23$Month == "Nov" & Puebla23$Wind_Speed > 5.69)
+sum(Puebla23$Month == "Dec" & Puebla23$Wind_Speed > 6.63)
+sum(Puebla23$Month == "Jan" & Puebla23$Wind_Speed > 6.84)
+
+#to get number of outliers for wind degree
+sum(Puebla23$Month == "Apr" & Puebla23$Wind_Deg > 335.5)
+
+#to get number of outliers for cloudiness
+sum(Puebla23$Month == "Feb" & Puebla23$Clouds_all > 37.5)
+sum(Puebla23$Month == "Oct" & Puebla23$Clouds_all < 19)
+
+```
+By looking at the boxplots of our monthly data we can see many outliers for different numerical variables. We can find the number of outliers by using the formula for calculating outliers. After getting the LL and UL we substitude the values in the sum() function t get the number of outliers in a variable.
+
+
+
+```{r}
+#Task5
+
+#to get mean and medians to put inside our histogram
+mean_temp = mean(Puebla23$Temp)
+median_temp = median(Puebla23$Temp)
+
+
+mean_feel_temp = mean(Puebla23$Feels_like)
+median_feel_temp = median(Puebla23$Feels_like)
+
+mean_pressure = mean(Puebla23$Pressure)
+median_pressure = median(Puebla23$Pressure)
+
+mean_humidity = mean(Puebla23$Humidity)
+median_humidity = median(Puebla23$Humidity)
+
+mean_wind_speed = mean(Puebla23$Wind_Speed)
+median_wind_speed = median(Puebla23$Wind_Speed)
+
+
+mean_wind_deg = mean(Puebla23$Wind_Deg)
+median_wind_deg = median(Puebla23$Wind_Deg)
+
+mean_clouds = mean(Puebla23$Clouds_all)
+median_clouds = median(Puebla23$Clouds_all)
+
+#to plot histograms
+hist(Puebla23$Temp, breaks = 45, xlim = c(0,35), ylim = c(0,500), main = "Histogram of Temperature", xlab = "Temperature (in °C)", col = 'orange', las = 1)
+abline(v = mean_temp, col = "red", lwd = 2, lty = 1)
+abline(v = median_temp, col = "blue", lwd = 2, lty = 1)
+
+hist(Puebla23$Feels_like, breaks = 45, xlim = c(0,35), ylim = c(0,500), main = "Histogram of Feels like Temperature", xlab = "Feels like Temperature (in °C)", col = 'orange', las = 1)
+abline(v = mean_feel_temp, col = "red", lwd = 2, lty = 1)
+abline(v = median_feel_temp, col = "blue", lwd = 2, lty = 1)
+
+hist(Puebla23$Pressure, breaks = 20, xlim = c(1005,1030), ylim = c(0,1200), main = "Histogram of Pressure", xlab = "Atmospheric Presssure (hPa)", col = 'orange', las = 1)
+abline(v = mean_pressure, col = "red", lwd = 2, lty = 1)
+abline(v = median_pressure, col = "blue", lwd = 2, lty = 1)
+
+hist(Puebla23$Humidity, breaks = 60, xlim = c(0,100), ylim = c(0,300), main = "Histogram of Humidity", xlab = "Percentage of Humidity (%)", col = 'orange', las = 1)
+abline(v = mean_humidity, col = "red", lwd = 2, lty = 1)
+abline(v = median_humidity, col = "blue", lwd = 2, lty = 1)
+
+hist(Puebla23$Wind_Speed, breaks = 60, xlim = c(0,10), ylim = c(0,600), main = "Histogram of Wind_Speed", xlab = "Wind_Speed (m/s)", col = 'orange', las = 1)
+abline(v = mean_wind_speed, col = "red", lwd = 2, lty = 1)
+abline(v = median_wind_speed, col = "blue", lwd = 2, lty = 1)
+
+hist(Puebla23$Wind_Deg, breaks = 55, xlim = c(0,360), ylim = c(0,800), main = "Histogram of Wind_Deg", xlab = "Direction of Wind (degree)", col = 'orange', las = 1)
+abline(v = mean_wind_deg, col = "red", lwd = 2, lty = 1)
+abline(v = median_wind_deg, col = "blue", lwd = 2, lty = 1)
+
+hist(Puebla23$Clouds_all, breaks = 50, xlim = c(0,100), ylim = c(0,2000), main = "Histogram of Clouds", xlab = "Percentage of Clouds (%)", col = 'orange', las = 1)
+abline(v = mean_clouds, col = "red", lwd = 2, lty = 1)
+abline(v = median_clouds, col = "blue", lwd = 2, lty = 1)
+
+```
+
+Using the hist() function on various continuous variables of our dataset, we can see the shape and spread of histograms of these variables.
