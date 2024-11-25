@@ -16,13 +16,8 @@ Data visualization using Power BI and Tableau to present insights on weather tre
 Emphasized on optimizing future predictions and presenting actionable insights for decision-makers.
 Installation & Setup
 
-Clone the repository:
-git clone https://github.com/Aqibbhat96/Weather-Data.git
-Install required packages:
-pip install -r requirements.txt
-Add your OpenWeatherMap API key to the script for data retrieval.
 Usage
 
-Run the weather_data_extraction.py script to fetch and store the weather data.
-Use the weather_analysis.ipynb notebook to perform EDA and visualize the data trends.
+Run the Python _extraction_code_Puebla_Weather_2023.py script to fetch and store the weather data.
+Use the EDA.Rmd notebook to perform EDA and visualize the data trends.
 Project Results The analysis highlighted seasonal weather trends, enabling better forecasting and predictive capabilities. The visualizations provide key insights for easy interpretation of weather dynamics in Puebla, Mexico.
