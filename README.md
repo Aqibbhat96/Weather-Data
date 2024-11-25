@@ -4,10 +4,11 @@ This project focuses on extracting and analyzing 1 year of weather data from the
 
 Technologies Used
 
-Python
-OpenWeatherMap API
+Python,
+OpenWeatherMap API,
+R,
 Power BI
-Tableau
+
 Key Features
 
 Automated data extraction and collection of weather metrics such as temperature, humidity, wind speed, etc., using Python-based API calls.
@@ -20,4 +21,4 @@ Usage
 
 Run the Python _extraction_code_Puebla_Weather_2023.py script to fetch and store the weather data.
 Use the EDA.Rmd notebook to perform EDA and visualize the data trends.
-Project Results The analysis highlighted seasonal weather trends, enabling better forecasting and predictive capabilities. The visualizations provide key insights for easy interpretation of weather dynamics in Puebla, Mexico.
+Report.pdf Results The analysis highlighted seasonal weather trends, enabling better forecasting and predictive capabilities. The visualizations provide key insights for easy interpretation of weather dynamics in Puebla, Mexico.
